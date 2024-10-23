@@ -28,6 +28,7 @@ python persona.py <reddit_username>
 
 ```bash
 pip install requests json os argparse anthropic rich
+```
 
 Make sure to add your **Claude API key** in `../../keys/key.txt`.
 
@@ -49,6 +50,7 @@ To install the required dependencies, copy the following into your terminal:
 
 ```bash
 pip install requests json os argparse rich groq
+```
 
 Make sure to add your **GROQ API key** in `../../keys/key-groq.txt`.
 
