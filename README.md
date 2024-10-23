@@ -1,6 +1,6 @@
-# Reddit Personality Analyzer
+# Reddit Personality Analyser
 
-This repository contains two Python scripts, `persona.py` and `persona-groq.py`, which analyze a Reddit user's personality by extracting their post history and interacting with two different AI models, Claude and GROQ, respectively. These scripts help provide insights into a user's online behavior and personality traits based on their Reddit activity.
+This repository contains two Python scripts, `persona.py` and `persona-groq.py`, which analyse a Reddit user's personality by extracting their post history and interacting with two different AI models, Claude and GROQ, respectively. These scripts help provide insights into a user's online behavior and personality traits based on their Reddit activity.
 
 ## Files
 
@@ -72,4 +72,4 @@ Make sure to add your **GROQ API key** in `../../keys/key-groq.txt`.
    python persona-groq.py <reddit_username>
    ```
 
-4. **Interactive Mode**: Follow the prompts in the terminal to ask questions and analyze Reddit data interactively.
+4. **Interactive Mode**: Follow the prompts in the terminal to ask questions and analyse Reddit data interactively.
