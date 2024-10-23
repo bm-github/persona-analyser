@@ -26,6 +26,9 @@ python persona.py <reddit_username>
 - `anthropic`
 - `rich`
 
+```bash
+pip install requests json os argparse anthropic rich
+
 Make sure to add your **Claude API key** in `../../keys/key.txt`.
 
 ### 2. `persona-groq.py`
@@ -40,13 +43,12 @@ This script is similar to `persona.py` but leverages the **GROQ API** for analys
 python persona-groq.py <reddit_username>
 ```
 
-#### Dependencies:
-- `requests`
-- `json`
-- `os`
-- `argparse`
-- `groq`
-- `rich`
+## Install Dependencies
+
+To install the required dependencies, copy the following into your terminal:
+
+```bash
+pip install requests json os argparse rich groq
 
 Make sure to add your **GROQ API key** in `../../keys/key-groq.txt`.
 
