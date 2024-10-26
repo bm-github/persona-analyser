@@ -18,7 +18,7 @@ This script uses the **Claude API** for analysis. It fetches a Reddit user's pos
 python persona.py <reddit_username>
 ```
 
-#### Dependencies:
+#### Install Dependencies:
 - `requests`
 - `json`
 - `os`
@@ -26,6 +26,7 @@ python persona.py <reddit_username>
 - `anthropic`
 - `rich`
 
+**Install dependencies**:
 ```bash
 pip install requests json os argparse anthropic rich
 ```
@@ -47,10 +48,6 @@ python persona-groq.py <reddit_username>
 ## Install Dependencies
 
 To install the required dependencies, copy the following into your terminal:
-
-```bash
-pip install requests json os argparse rich groq
-```
 
 Make sure to add your **GROQ API key** in `../../keys/key-groq.txt`.
 
