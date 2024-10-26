@@ -1,76 +1,137 @@
 # Reddit Personality Analyser
 
-This repository contains two Python scripts, `persona.py` and `persona-groq.py`, which analyse a Reddit user's personality by extracting their post history and interacting with two different AI models, Claude and GROQ, respectively. These scripts help provide insights into a user's online behavior and personality traits based on their Reddit activity.
+A Python-based tool that analyses Reddit users' activity patterns and provides AI-powered insights using either Anthropic's Claude or Groq's LLaMA models.
 
-## Files
+## Overview
 
-### 1. `persona.py`
+This tool fetches a Reddit user's submission and comment history, analyses their activity patterns, and uses AI to provide insights about their interests, behaviour, and communication style. It supports interactive analysis sessions where you can ask questions about the user and receive AI-generated insights based on their Reddit activity.
 
-This script uses the **Claude API** for analysis. It fetches a Reddit user's posts, processes them, and allows interactive querying of the user's personality traits. Key features include:
+## Features
 
-- **Fetching Reddit User Data**: Retrieves the post history of a specified Reddit user.
-- **Caching**: Stores the fetched data and previous analyses in JSON format for future use.
-- **Interactive Analysis**: Users can ask personality-related questions about the Reddit user, and responses are generated using the Claude API.
-- **Rich Integration**: Utilizes the `rich` library for enhanced terminal output.
+- Fetches and caches Reddit user activity data
+- Supports both Claude and Groq AI models for analysis
+- Interactive command-line interface with rich text formatting
+- Maintains chat history for context-aware analysis
+- Data caching to reduce API calls
+- Comprehensive activity statistics
+- Configurable data refresh options
 
-#### Usage:
+## Prerequisites
+
+- Python 3.7+
+- Reddit API credentials
+- Either an Anthropic API key (for Claude) or a Groq API key (for LLaMA)
+
+## Installation
+
+1. Clone the repository:
+
 ```bash
-python persona.py <reddit_username>
+git clone https://github.com/yourusername/reddit-personality-analyser.git
+cd reddit-personality-analyser
 ```
 
-#### Install Dependencies:
-- `requests`
-- `json`
-- `os`
-- `argparse`
-- `anthropic`
-- `rich`
+2. Install required packages:
 
-**Install dependencies**:
 ```bash
-pip install requests json os argparse anthropic rich
+pip install praw anthropic groq rich
 ```
 
-Make sure to add your **Claude API key** in `../../keys/key.txt`.
+3. Set up your credentials:
+   - Create a `keys` directory in the project root
+   - Add your API keys:
+     - `keys/key.txt` for Anthropic API key
+     - `keys/key-groq.txt` for Groq API key
+   - Add Reddit credentials in `keys/reddit-credentials.json`:
 
-### 2. `persona-groq.py`
-
-This script is similar to `persona.py` but leverages the **GROQ API** for analysis instead of Claude. It provides the same functionalities such as fetching Reddit data, caching, and interactive analysis.
-
-- **GROQ Integration**: Replaces Claude with GROQ to generate responses based on Reddit post history.
-- **API Key Handling**: Requires an API key from GROQ, stored in `../../keys/key-groq.txt`.
-
-#### Usage:
-```bash
-python persona-groq.py <reddit_username>
+```json
+{
+  "client_id": "your_client_id",
+  "client_secret": "your_client_secret",
+  "user_agent": "your_user_agent"
+}
 ```
 
-## Install Dependencies
+## Usage
 
-To install the required dependencies, copy the following into your terminal:
+### Basic Usage
 
-Make sure to add your **GROQ API key** in `../../keys/key-groq.txt`.
+Run the analyser with either Claude or Groq:
 
-## How to Run
+```bash
+# Using Claude
+python persona-claude.py username
 
-1. **Install dependencies**:
-   ```bash
-   pip install requests rich anthropic groq
-   ```
+# Using Groq
+python persona-groq.py username
+```
 
-2. **Add API keys**:
-   - For `persona.py`, place the Claude API key in `../../keys/key.txt`.
-   - For `persona-groq.py`, place the GROQ API key in `../../keys/key-groq.txt`.
+### Command-line Options
 
-3. **Run the script**:
-   ```bash
-   python persona.py <reddit_username>
-   ```
+- `--refresh`: Force refresh user data instead of using cache
+- `--limit`: Limit the number of posts/comments to fetch (optional)
 
-   or
+### Interactive Commands
 
-   ```bash
-   python persona-groq.py <reddit_username>
-   ```
+During an analysis session:
 
-4. **Interactive Mode**: Follow the prompts in the terminal to ask questions and analyse Reddit data interactively.
+- Type `exit` to end the session
+- Type `history` to view chat history
+- Type `refresh` to force refresh user data
+
+## Features in Detail
+
+### Data Collection
+
+- Fetches user submissions and comments
+- Calculates activity statistics
+- Identifies top active subreddits
+- Caches data for 24 hours by default
+
+### AI Analysis
+
+- Context-aware responses using chat history
+- In-depth analysis of posting patterns
+- Insights into user interests and behaviour
+- Communication style assessment
+
+### Data Caching
+
+- Automatic caching of fetched data
+- 24-hour cache validity
+- Force refresh option available
+- Separate cache for chat history
+
+## Project Structure
+
+```
+reddit-personality-analyser/
+├── persona-claude.py    # Claude-based analyser
+├── persona-groq.py      # Groq-based analyser
+├── keys/                # API credentials (not included)
+├── reddit_cache/        # Cached user data
+└── chat_history/        # Stored chat histories
+```
+
+## Error Handling
+
+The tool includes comprehensive error handling for:
+
+- Missing or invalid credentials
+- API rate limits
+- Network issues
+- Invalid usernames
+- Data parsing errors
+
+## Privacy Considerations
+
+This tool only analyses publicly available Reddit data. It:
+
+- Respects Reddit's API terms of service
+- Only accesses public posts and comments
+- Stores data locally in cache
+- Does not collect or transmit personal information
+
+## Disclaimer
+
+This tool is for educational and research purposes only. Please use responsibly and in accordance with Reddit's terms of service.

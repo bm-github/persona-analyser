@@ -9,17 +9,17 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.markdown import Markdown
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from groq import Groq
+from anthropic import Anthropic
 
 class RedditPersonalityAnalyser:
     def __init__(self):
         self.console = Console()
         
         try:
-            with open('../../keys/key-groq.txt', 'r') as f:
-                groq_api_key = f.read().strip()
-                if not groq_api_key:
-                    raise ValueError("GROQ API key file is empty")
+            with open('../../keys/key.txt', 'r') as f:
+                anthropic_api_key = f.read().strip()
+                if not anthropic_api_key:
+                    raise ValueError("Anthropic API key file is empty")
                     
             with open('../../keys/reddit-credentials.json', 'r') as f:
                 reddit_creds = json.load(f)
@@ -32,9 +32,9 @@ class RedditPersonalityAnalyser:
             raise Exception(f"Error reading credentials: {str(e)}")
         
         try:
-            self.client = Groq(api_key=groq_api_key)
+            self.client = Anthropic(api_key=anthropic_api_key)
         except Exception as e:
-            raise Exception(f"Failed to initialise GROQ client: {str(e)}")
+            raise Exception(f"Failed to initialise Anthropic client: {str(e)}")
             
         try:
             self.reddit = praw.Reddit(
@@ -249,8 +249,8 @@ class RedditPersonalityAnalyser:
             
         return content
 
-    def analyse_with_groq(self, username: str, question: str, chat_history: List[Dict]) -> str:
-        """Interactive analysis of user data with GROQ."""
+    def analyse_with_claude(self, username: str, question: str, chat_history: List[Dict]) -> str:
+        """Interactive analysis of user data with Claude."""
         data = self.fetch_user_data(username)
         if not data:
             return "Unable to fetch user data."
@@ -263,18 +263,23 @@ class RedditPersonalityAnalyser:
             for entry in chat_history[-3:]  # Include last 3 exchanges for context
         ])
 
-        messages = [
-            {
-                "role": "system",
-                "content": """You are an AI analying Reddit activity to provide insights about users. 
-                Focus on identifying patterns in posting behavior, interests, and communication style. 
-                Consider both the content and context of posts, including subreddit choices and engagement levels.
-                Be objective and base your analysis only on the available data."""
-            },
-            {
-                "role": "user",
-                "content": f"""Based on this Reddit activity and our previous conversation, please answer 
-                the following question about u/{username}:
+        # Get response from Claude
+        message = self.client.messages.create(
+            model="claude-3-5-sonnet-latest",
+            max_tokens=1000,
+            temperature=0.7,
+            messages=[
+                {
+                    "role": "system",
+                    "content": """You are an AI analyzing Reddit activity to provide insights about users. 
+                    Focus on identifying patterns in posting behavior, interests, and communication style. 
+                    Consider both the content and context of posts, including subreddit choices and engagement levels.
+                    Be objective and base your analysis only on the available data."""
+                },
+                {
+                    "role": "user",
+                    "content": f"""Based on this Reddit activity and our previous conversation, please answer 
+                    the following question about u/{username}:
 
 Previous conversation:
 {history_context}
@@ -285,20 +290,11 @@ User Activity:
 {formatted_data}
 
 Please provide a focused and insightful answer based on the available data and our conversation history."""
-            }
-        ]
-
-        try:
-            chat_completion = self.client.chat.completions.create(
-                messages=messages,
-                model="llama3-8b-8192",
-                temperature=0.7,
-                max_tokens=1000
-            )
-            return chat_completion.choices[0].message.content
-        except Exception as e:
-            self.console.print(f"[red]Error calling GROQ API: {e}[/red]")
-            return f"Error analysing data: {str(e)}"
+                }
+            ]
+        )
+        
+        return message.content
 
 def interactive_analysis(username: str):
     """Interactive analysis session for a Reddit user."""
@@ -344,7 +340,7 @@ def interactive_analysis(username: str):
             
         try:
             console.print("[yellow]Analysing...[/yellow]")
-            analysis = analyser.analyse_with_groq(username, question, chat_history)
+            analysis = analyser.analyse_with_claude(username, question, chat_history)
             
             chat_history.append({
                 "timestamp": datetime.now().isoformat(),
